@@ -1,0 +1,46 @@
+name: SonarCloud C/C++ CI
+
+on:
+  push:
+    branches: [ "master", '*-ci' ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: sonar_cloud
+    runs-on: ubuntu-latest
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # shallow clones should be disabled for a better relevancy of analysis
+        submodules: recursive
+
+    - name: Install sonar-scanner and build-wrapper
+      uses: SonarSource/sonarcloud-github-c-cpp@v2
+
+    - name: Install dependencies
+      run: sudo apt-get install cmake
+
+    - name: Build sonarcloud-test application under SC build wrapper
+      run: |
+        mkdir -p build/cpp
+        cmake -S cpp -B build/cpp
+        build-wrapper-linux-x86-64 --out-dir ${{env.BUILD_WRAPPER_OUT_DIR}} cmake --build build/cpp
+
+    - name: Run sonar-scanner
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        sonar-scanner \
+            --define sonar.projectKey="ndsev_zserio-sonarcloud-test" \
+            --define sonar.organization="ndsev" \
+            --define sonar.sourceEncoding="UTF-8" \
+            --define sonar.exclusions="**/CMakeFiles/**/*" \
+            --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"

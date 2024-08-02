@@ -117,9 +117,9 @@ static void rule_8_2_2()
 static void rule_8_2_5()
 {
     const uint32_t value = 0xff00ff00U;
-    const uint8_t* u8 = reinterpret_cast<const uint8_t*>(&value);
-    //                  ^ reinterpret_cast used here
-    (void)u8;
+    const uint16_t* u16 = reinterpret_cast<const uint16_t*>(&value);
+    //                    ^ reinterpret_cast used here
+    (void)u16;
 }
 
 // The body of an iteration-statement or a selection-statement shall be a compound-statement

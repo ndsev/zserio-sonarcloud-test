@@ -228,18 +228,18 @@ void rule_28_6_2_f1(std::string&& ss)
 }
 
 template <typename T1, typename T2>
-void rule_28_6_2_f2(T1&& t1, T2&& t2)
+void rule_28_6_2_f2(T1&& t1, T2& t2)
 {
     rule_28_6_2_f1(t1); // non-compliant
     rule_28_6_2_f1(std::forward<T1>(t1));
-    rule_28_6_2_f1(std::forward<T2>(t2));
+    rule_28_6_2_f1(std::forward<T2>(t2)); // non-compliant, not a forwarding reference
     rule_28_6_2_f1(std::forward<T2>(t1)); // wrong template argument
 
     rule_28_6_2_f1(std::move(t1)); // non-compliant
     rule_28_6_2_f1(std::move(t2)); // rule does not apply
 
     auto lambda = [] (auto&& t) { rule_28_6_2_f1(t); };  // non-compliant
-    lambda(t1);
+    lambda(std::forward<T1>(t1));
 }
 
 template <typename T>

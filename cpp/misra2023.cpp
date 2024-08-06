@@ -169,6 +169,48 @@ static void rule_15_1_3()
     (void)Functions::func(value);
 }
 
+void rule_28_6_2_f1(std::string& s)
+{
+    (void)s;
+}
+
+void rule_28_6_2_f1(std::string&& ss)
+{
+    (void)ss;
+}
+
+template <typename T1, typename T2>
+void rule_28_6_2_f2(T1&& t1, T2&& t2)
+{
+    rule_28_6_2_f1(t1); // non-compliant
+    rule_28_6_2_f1(std::forward<T1>(t1));
+    rule_28_6_2_f1(std::forward<T2>(t2));
+    rule_28_6_2_f1(std::forward<T2>(t1)); // wrong template argument
+
+    rule_28_6_2_f1(std::move(t1)); // non-compliant
+    rule_28_6_2_f1(std::move(t2)); // rule does not apply
+
+    auto lambda = [] (auto&& t) { rule_28_6_2_f1(t); };  // non-compliant
+    lambda(t1);
+}
+
+template <typename T>
+struct Rule_28_6_2
+{
+    void foo(T&& t)
+    {
+        std::move(t); // rule does not apply (not a forwarding reference)
+    }
+};
+
+// "Forwarding references" and "std::forward" shall be used together
+void rule_28_6_2()
+{
+    std::string s;
+    rule_28_6_2_f2(std::string{"hello"}, s);
+    rule_28_6_2_f2(s, s);
+}
+
 void check_rules()
 {
     // Rule 0.1.2 The value returned by a function shall be used
@@ -217,6 +259,11 @@ void check_rules()
     // - Sonar Rule ID: cpp:S1709
     // - Issue: https://github.com/ndsev/zserio/issues/593
     rule_15_1_3();
+
+    // Rule 28.6.2 "Forwarding references" and "std::forward" shall be used together
+    // - Sonar Rule ID: cpp:M23_279
+    // - Issue: https://github.com/ndsev/zserio/issues/634
+    rule_28_6_2();
 }
 
 } // namespace misra2023

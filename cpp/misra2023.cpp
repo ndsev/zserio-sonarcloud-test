@@ -4,6 +4,9 @@
 
 #include "misra2023.h"
 
+#define RULE_19_2_2 "rule_19_2_2.h"
+#include RULE_19_2_2
+
 namespace misra2023
 {
 
@@ -133,6 +136,51 @@ static void rule_9_3_1()
         continue; // not a compound statement here
 }
 
+// Special member functions shall be provided appropriately
+static void rule_15_0_1()
+{
+    class BaseWithPublicVirtualDtor
+    {
+    public:
+        virtual ~BaseWithPublicVirtualDtor() = default;
+    };
+
+    class BaseWithProtectedNonVirtualDtor
+    {
+    protected:
+        ~BaseWithProtectedNonVirtualDtor() = default;
+    };
+
+    class BaseWithoutAppropriateDtor
+    {
+    public:
+        virtual void work() = 0;
+    };
+
+    class DerivedA : public BaseWithPublicVirtualDtor
+    {
+    };
+
+    class DerivedB : public BaseWithProtectedNonVirtualDtor
+    {
+    };
+
+    class DerivedC : public BaseWithoutAppropriateDtor
+    {
+    public:
+        void work() override
+        {}
+    };
+
+    DerivedA a;
+    DerivedB b;
+    DerivedC c;
+
+    (void)a;
+    (void)b;
+    (void)c;
+}
+
 // Conversion operators and constructors that are callable with a single argument shall be explicit
 static void rule_15_1_3()
 {
@@ -255,10 +303,20 @@ void check_rules()
     // - Issue: https://github.com/ndsev/zserio/issues/606
     rule_9_3_1();
 
+    // Rule 15.0.1 Special member functions shall be provided appropriately
+    // - Sonar Rule ID: cpp:S1235 (partially matches)
+    // - Issue: https://github.com/ndsev/zserio/issues/637
+    rule_15_0_1();
+
     // Rule 15.3.1 Conversion operators and constructors that are callable with a single argument shall be explicit
     // - Sonar Rule ID: cpp:S1709
     // - Issue: https://github.com/ndsev/zserio/issues/593
     rule_15_1_3();
+
+    // Rule 19.2.2 The #include directive shall be followed by either a <filename> or "filename" sequence
+    // - Sonar Rule ID: cpp:S956
+    // - Issue: https://github.com/ndsev/zserio/issues/639
+    rule_19_2_2();
 
     // Rule 28.6.2 "Forwarding references" and "std::forward" shall be used together
     // - Sonar Rule ID: cpp:M23_279

@@ -21,6 +21,18 @@ static void rule_0_1_2()
     Rule::func(); // return value not used here
 }
 
+constexpr long double operator"" _km_5_10_1(long double len) noexcept
+{
+    return len;
+}
+
+// User-defined identifiers shall have an appropriate form
+static void rule_5_10_1()
+{
+    const long double len = 10.0_km_5_10_1;
+    (void)len;
+}
+
 // A variable declared in an inner scope shall not hide a variable declared in an outer scope
 static void rule_6_4_1()
 {
@@ -217,18 +229,18 @@ static void rule_15_1_3()
     (void)Functions::func(value);
 }
 
-void rule_28_6_2_f1(std::string& s)
+static void rule_28_6_2_f1(std::string& s)
 {
     (void)s;
 }
 
-void rule_28_6_2_f1(std::string&& ss)
+static void rule_28_6_2_f1(std::string&& ss)
 {
     (void)ss;
 }
 
 template <typename T1, typename T2>
-void rule_28_6_2_f2(T1&& t1, T2& t2)
+static void rule_28_6_2_f2(T1&& t1, T2& t2)
 {
     rule_28_6_2_f1(t1); // non-compliant
     rule_28_6_2_f1(std::forward<T1>(t1));
@@ -252,7 +264,7 @@ struct Rule_28_6_2
 };
 
 // "Forwarding references" and "std::forward" shall be used together
-void rule_28_6_2()
+static void rule_28_6_2()
 {
     std::string s;
     rule_28_6_2_f2(std::string{"hello"}, s);
@@ -265,6 +277,11 @@ void check_rules()
     // - Sonar Rule ID: cpp:M23_007
     // - Issue: https://github.com/ndsev/zserio/issues/607
     rule_0_1_2();
+
+    // Rule 5.10.1 User-defined identifiers shall have an appropriate form
+    // - Sonar Rule ID: cpp:S978 (partially matches)
+    // - Issue: https://github.com/ndsev/zserio/issues/635
+    rule_5_10_1();
 
     // Rule 6.4.1 A variable declared in an inner scope shall not hide a variable declared in an outer scope
     // - Open Issue: https://github.com/ndsev/zserio/issues/609 - wontfix

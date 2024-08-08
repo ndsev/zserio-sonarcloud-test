@@ -68,6 +68,19 @@ static void rule_6_4_1()
     Functions::func(std::allocator<uint8_t>());
 }
 
+static const uint32_t* get_static_6_7_1()
+{
+    static const uint32_t staticValue = 13;
+    return &staticValue;
+}
+
+// Local variables shall not have static storage duration
+static void rule_6_7_1()
+{
+    const uint32_t staticValue = *get_static_6_7_1();
+    (void)staticValue;
+}
+
 static const std::string RULE_6_7_2 = "MISRA C++ 2024 6.7.2 - Global variables shall not be used";
 
 // Global variables shall not be used
@@ -321,6 +334,11 @@ void check_rules()
     // - Open Issue: https://github.com/ndsev/zserio/issues/609 - wontfix
     // - not covered by any sonar rule, some problems fixed manually, no check in CI
     rule_6_4_1();
+
+    // Rule 6.7.1 Local variables shall not have static storage duration
+    // - Sonar Rule ID: cpp:M23_233
+    // - Issue: https://github.com/ndsev/zserio/issues/631
+    rule_6_7_1();
 
     // Rule 6.7.2 Global variables shall not be used
     // - Sonar Rule ID: cpp:M23_388

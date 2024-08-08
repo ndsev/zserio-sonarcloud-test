@@ -281,6 +281,7 @@ void check_rules()
     // Rule 5.10.1 User-defined identifiers shall have an appropriate form
     // - Sonar Rule ID: cpp:S978 (partially matches)
     // - Issue: https://github.com/ndsev/zserio/issues/635
+    // - doesn't catch anything, _sv fixed manually, no check in CI
     rule_5_10_1();
 
     // Rule 6.4.1 A variable declared in an inner scope shall not hide a variable declared in an outer scope

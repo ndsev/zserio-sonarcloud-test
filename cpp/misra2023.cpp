@@ -148,6 +148,19 @@ static void rule_9_3_1()
         continue; // not a compound statement here
 }
 
+union Union_12_3_1
+{
+    uint32_t u32;
+    float f32;
+};
+
+// The "union" keyword shall not be used
+static void rule_12_3_1()
+{
+    Union_12_3_1 u_12_3_1{10};
+    (void)u_12_3_1;
+}
+
 // Special member functions shall be provided appropriately
 static void rule_15_0_1()
 {
@@ -320,6 +333,11 @@ void check_rules()
     // - Sonar Rule ID: cpp:S121, cpp:S5305
     // - Issue: https://github.com/ndsev/zserio/issues/606
     rule_9_3_1();
+
+    // Rule 12.3.1 The "union" keyword shall not be used
+    // - Sonar Rule ID: cpp:M23_158
+    // Issue: https://github.com/ndsev/zserio/issues/633
+    rule_12_3_1();
 
     // Rule 15.0.1 Special member functions shall be provided appropriately
     // - Sonar Rule ID: cpp:S1235 (partially matches)

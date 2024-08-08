@@ -21,7 +21,7 @@ static void rule_0_1_2()
     Rule::func(); // return value not used here
 }
 
-constexpr long double operator"" _km_5_10_1(long double len) noexcept
+static constexpr long double operator"" _km_5_10_1(long double len) noexcept
 {
     return len;
 }
@@ -148,17 +148,37 @@ static void rule_9_3_1()
         continue; // not a compound statement here
 }
 
-union Union_12_3_1
-{
-    uint32_t u32;
-    float f32;
-};
-
 // The "union" keyword shall not be used
 static void rule_12_3_1()
 {
+    union Union_12_3_1
+    {
+        uint32_t u32;
+        float f32;
+    };
+
     Union_12_3_1 u_12_3_1{10};
     (void)u_12_3_1;
+}
+
+// The parameters in all declarations or overrides of a function shall either be unnamed or have identical names
+static void rule_13_3_3()
+{
+    struct Base
+    {
+        virtual ~Base() = default;
+        virtual void func(uint32_t value)
+        {}
+    };
+
+    struct Derived : Base
+    {
+        void func(uint32_t otherNameForValue) override
+        {}
+    };
+
+    Derived derived;
+    derived.func(1);
 }
 
 // Special member functions shall be provided appropriately
@@ -338,6 +358,11 @@ void check_rules()
     // - Sonar Rule ID: cpp:M23_158
     // Issue: https://github.com/ndsev/zserio/issues/633
     rule_12_3_1();
+
+    // Rule 13.3.3 The parameters in all declarations or overrides of a function shall either be unnamed or have identical names
+    // - Sonar Rule ID: cpp:S5319
+    // Issue: https://github.com/ndsev/zserio/issues/632
+    rule_13_3_3();
 
     // Rule 15.0.1 Special member functions shall be provided appropriately
     // - Sonar Rule ID: cpp:S1235 (partially matches)

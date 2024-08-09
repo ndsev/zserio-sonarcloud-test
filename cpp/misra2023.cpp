@@ -89,6 +89,20 @@ static void rule_6_7_2()
     (void)RULE_6_7_2;
 }
 
+// The operands of bitwise operators and shift operators shall be appropriate
+static void rule_7_0_4()
+{
+    const int32_t i32 = 1;
+    i32 << 1; // left operand is signed
+
+    const uint8_t u8 = 1;
+    1 << u8; // left operand is signed
+
+    i32 | 1; // signed operands
+
+    ~i32; // signed operand
+}
+
 // Integral promotion or the usual arithmetic conversions shall not change the type signedness
 static void rule_7_0_5()
 {
@@ -345,6 +359,11 @@ void check_rules()
     // - Issue: https://github.com/ndsev/zserio/issues/611
     rule_6_7_2();
 
+    // Rule 7.0.4 The operands of bitwise operators and shift operators shall be appropriate
+    // Sonar Rule ID:
+    // - Issue: https://github.com/ndsev/zserio/issues/630
+    rule_7_0_4();
+
     // Rule 7.0.5 Integral promotion or the usual arithmetic conversions shall not change the type signedness
     // - Sonar Rule ID: cpp:S5276, cpp:S845
     // - Open Issue: https://github.com/ndsev/zserio/issues/605 - wontfix
@@ -358,7 +377,7 @@ void check_rules()
     rule_7_0_6();
 
     // Rule 8.2.2 C-style casts and functional notation casts shall not be used
-    // - Sonar Rule ID: cpp:M23_089
+    // - Sonar Rule ID: cpp:M23_0   9
     // - Issue: https://github.com/ndsev/zserio/issues/610
     rule_8_2_2();
 

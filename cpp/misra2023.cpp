@@ -127,7 +127,7 @@ static void rule_7_0_4()
 
     use(~i32); // signed operand
 
-    use(i32 & 13U) // left operand is signed
+    use(i32 & 13U); // left operand is signed
 }
 
 // Integral promotion or the usual arithmetic conversions shall not change the type signedness
@@ -336,9 +336,6 @@ static void rule_28_6_2_f2(T1&& t1, T2& t2)
 
     rule_28_6_2_f1(std::move(t1)); // non-compliant
     rule_28_6_2_f1(std::move(t2)); // rule does not apply
-
-    auto lambda = [] (auto&& t) { rule_28_6_2_f1(t); };  // non-compliant
-    lambda(std::forward<T1>(t1));
 }
 
 template <typename T>

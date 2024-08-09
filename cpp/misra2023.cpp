@@ -89,6 +89,20 @@ static void rule_6_7_2()
     (void)RULE_6_7_2;
 }
 
+// The numerical value of a character shall not be used
+static void rule_7_0_3()
+{
+    const char a = 10; // implicit conversion from int to char
+    const int8_t b = 'a'; // non-compliant
+    const uint8_t c = '\r'; // non-compliant
+    const signed char d = 11; // ok, type has integral category
+
+    (void)a;
+    (void)b;
+    (void)c;
+    (void)d;
+}
+
 // The operands of bitwise operators and shift operators shall be appropriate
 static void rule_7_0_4()
 {
@@ -359,8 +373,13 @@ void check_rules()
     // - Issue: https://github.com/ndsev/zserio/issues/611
     rule_6_7_2();
 
+    // Rule 7.0.3 The numerical value of a character shall not be used
+    // - Sonar Rule ID:
+    // - Issue: https://github.com/ndsev/zserio/issues/628
+    rule_7_0_3();
+
     // Rule 7.0.4 The operands of bitwise operators and shift operators shall be appropriate
-    // Sonar Rule ID:
+    // - Sonar Rule ID:
     // - Issue: https://github.com/ndsev/zserio/issues/630
     rule_7_0_4();
 

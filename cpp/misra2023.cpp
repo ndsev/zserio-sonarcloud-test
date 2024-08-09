@@ -10,6 +10,17 @@
 namespace misra2023
 {
 
+namespace
+{
+
+template <typename T>
+void use(T arg)
+{
+    (void)arg;
+}
+
+}
+
 // The value returned by a function shall be used
 static void rule_0_1_2()
 {
@@ -92,7 +103,7 @@ static void rule_6_7_2()
 // The numerical value of a character shall not be used
 static void rule_7_0_3()
 {
-    const char a = 10; // implicit conversion from int to char
+    const char a = 10; // non-compliant implicit conversion from int to char
     const int8_t b = 'a'; // non-compliant
     const uint8_t c = '\r'; // non-compliant
     const signed char d = 11; // ok, type has integral category
@@ -107,14 +118,14 @@ static void rule_7_0_3()
 static void rule_7_0_4()
 {
     const int32_t i32 = 1;
-    i32 << 1; // left operand is signed
+    use(i32 << 1); // left operand is signed
 
     const uint8_t u8 = 1;
-    1 << u8; // left operand is signed
+    use(1 << u8); // left operand is signed
 
-    i32 | 1; // signed operands
+    use(i32 | 1); // signed operands
 
-    ~i32; // signed operand
+    use(~i32); // signed operand
 }
 
 // Integral promotion or the usual arithmetic conversions shall not change the type signedness

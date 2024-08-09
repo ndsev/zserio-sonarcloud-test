@@ -103,10 +103,10 @@ static void rule_6_7_2()
 // The numerical value of a character shall not be used
 static void rule_7_0_3()
 {
-    const char a = 10; // non-compliant implicit conversion from int to char
-    const int8_t b = 'a'; // non-compliant
-    const uint8_t c = '\r'; // non-compliant
-    const signed char d = 11; // ok, type has integral category
+    char a = 10; // non-compliant implicit conversion from int to char
+    int8_t b = 'a'; // non-compliant
+    uint8_t c = '\r'; // non-compliant
+    signed char d = 11; // ok, type has integral category
 
     (void)a;
     (void)b;
@@ -117,10 +117,10 @@ static void rule_7_0_3()
 // The operands of bitwise operators and shift operators shall be appropriate
 static void rule_7_0_4()
 {
-    const int32_t i32 = 1;
+    int32_t i32 = 1;
     use(i32 << 1); // left operand is signed
 
-    const uint8_t u8 = 1;
+    uint8_t u8 = 1;
     use(1 << u8); // left operand is signed
 
     use(i32 | 1); // signed operands

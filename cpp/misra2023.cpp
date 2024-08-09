@@ -126,6 +126,8 @@ static void rule_7_0_4()
     use(i32 | 1); // signed operands
 
     use(~i32); // signed operand
+
+    use(i32 & 13U) // left operand is signed
 }
 
 // Integral promotion or the usual arithmetic conversions shall not change the type signedness

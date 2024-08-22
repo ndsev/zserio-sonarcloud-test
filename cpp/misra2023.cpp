@@ -170,6 +170,20 @@ static void rule_7_0_6()
     }
 }
 
+// An array passed as a function argument shall not decay to a pointer
+static void rule_7_11_2()
+{
+    struct Rule
+    {
+        static void func(const char* str)
+        {
+            (void)str;
+        }
+    };
+
+    Rule::func("Rule test");
+}
+
 // C-style casts and functional casts shall not be used.
 static void rule_8_2_2()
 {
@@ -384,12 +398,12 @@ void check_rules()
     rule_6_7_2();
 
     // Rule 7.0.3 The numerical value of a character shall not be used
-    // - Sonar Rule ID:
+    // - Sonar Rule ID: cpp:S810
     // - Issue: https://github.com/ndsev/zserio/issues/628
     rule_7_0_3();
 
     // Rule 7.0.4 The operands of bitwise operators and shift operators shall be appropriate
-    // - Sonar Rule ID:
+    // - Sonar Rule ID: cpp:S874
     // - Issue: https://github.com/ndsev/zserio/issues/630
     rule_7_0_4();
 
@@ -404,6 +418,11 @@ void check_rules()
     // - Issue: https://github.com/ndsev/zserio/issues/608
     // - integral promotions not covered by any sonar rule
     rule_7_0_6();
+
+    // Rule 7.11.2 An array passed as a function argument shall not decay to a pointer
+    // - Sonar Rule ID: cpp:S945
+    // Issue: https://github.com/ndsev/zserio/issues/660
+    rule_7_11_2();
 
     // Rule 8.2.2 C-style casts and functional notation casts shall not be used
     // - Sonar Rule ID: cpp:M23_0   9

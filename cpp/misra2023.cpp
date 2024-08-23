@@ -170,6 +170,15 @@ static void rule_7_0_6()
     }
 }
 
+struct RuleFix_7_11_2
+{
+    template <size_t N>
+    static void func(const char (&str)[N])
+    {
+        (void)str;
+    }
+};
+
 // An array passed as a function argument shall not decay to a pointer
 static void rule_7_11_2()
 {
@@ -181,7 +190,13 @@ static void rule_7_11_2()
         }
     };
 
+    const char au[] = { 'a', 'b' };
+
     Rule::func("Rule test");
+    Rule::func(au);
+
+    RuleFix_7_11_2::func("Rule test");
+    RuleFix_7_11_2::func(au);
 }
 
 // C-style casts and functional casts shall not be used.
